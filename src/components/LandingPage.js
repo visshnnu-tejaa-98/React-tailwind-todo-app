@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Container from "./Container";
 import Form from "./Form";
 import Navbar from "./Navbar";
@@ -20,7 +20,6 @@ const LandingPage = () => {
   ]);
   const [todo, setTodo] = useState("");
   const [btnLabel, setBtnLabel] = useState("Add");
-  const [selectedTodoForEdit, setSelectedTodoForEdit] = useState({});
   const handleAddTodo = (e) => {
     e.preventDefault();
     let todoObj = {
@@ -52,27 +51,11 @@ const LandingPage = () => {
     setTodos(filteredTodos);
   };
   const handleEdit = (selectedTodo) => {
-    setSelectedTodoForEdit(selectedTodo);
     setTodo(selectedTodo.todo);
     setBtnLabel("Edit");
     handleDeleteTodo(selectedTodo);
   };
 
-  const renderContainer = () => {
-    return (
-      <Container
-        todos={todos}
-        setTodos={setTodos}
-        handleDeleteTodo={handleDeleteTodo}
-        handleOnComplete={handleOnComplete}
-        handleEdit={handleEdit}
-      />
-    );
-  };
-
-  useEffect(() => {
-    renderContainer();
-  }, [todos]);
   return (
     <div className="mx-[5%] md:mx-[15%]">
       <Navbar />
@@ -84,7 +67,13 @@ const LandingPage = () => {
         btnLabel={btnLabel}
         handleAddTodo={handleAddTodo}
       />
-      {renderContainer()}
+      <Container
+        todos={todos}
+        setTodos={setTodos}
+        handleDeleteTodo={handleDeleteTodo}
+        handleOnComplete={handleOnComplete}
+        handleEdit={handleEdit}
+      />
     </div>
   );
 };
