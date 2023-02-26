@@ -1,71 +1,74 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Container from "./Container";
 import Form from "./Form";
 import Navbar from "./Navbar";
 
 const LandingPage = () => {
-  const [todos, setTodos] = useState([
-    {
-      id: "1",
-      todo: "Buy Milk",
-      status: "active",
-      edit: false,
-    },
-    {
-      id: "2",
-      todo: "Buy Eggs",
-      status: "active",
-      edit: false,
-    },
-  ]);
-  const [todo, setTodo] = useState("");
+  const [todos, setTodos] = useState([]);
+  const [input, setInput] = useState("");
   const [btnLabel, setBtnLabel] = useState("Add");
+  const [selectedTodo, setSelectedTodo] = useState({});
   const handleAddTodo = (e) => {
     e.preventDefault();
-    let todoObj = {
-      id: `${Math.random()}`,
-      todo: todo,
-      status: "active",
-      edit: false,
-    };
-    setTodos([...todos, todoObj]);
-    setBtnLabel("Add");
-    setTodo("");
+    if (input.length) {
+      let todoObj = {
+        id: `${Math.random()}`,
+        todo: input,
+        completed: false,
+      };
+      setTodos([...todos, todoObj]);
+      setBtnLabel("Add");
+      setInput("");
+    }
   };
   const handleDeleteTodo = (todo) => {
-    todos.forEach((t) => {
-      if (t.id === todo.id) {
-        todo.status = "deleted";
-      }
-    });
-    let filteredTodos = todos.filter((item) => item.id !== todo.id);
-    setTodos(filteredTodos);
+    setTodos(todos.filter((item) => item.id !== todo.id));
   };
   const handleOnComplete = (todo) => {
-    todos.forEach((t) => {
-      if (t.id === todo.id) {
-        todo.status = "completed";
-      }
-    });
-    let filteredTodos = todos.filter((item) => item.id !== todo.id);
-    setTodos(filteredTodos);
+    console.log("Hello");
+    setTodos(
+      todos.map((t) => {
+        if (t.id === todo.id) {
+          return { ...t, completed: !t.completed };
+        }
+        return t;
+      })
+    );
   };
-  const handleEdit = (selectedTodo) => {
-    setTodo(selectedTodo.todo);
+  const handleEdit = (item) => {
+    setInput(item.todo);
+    setSelectedTodo(item);
     setBtnLabel("Edit");
-    handleDeleteTodo(selectedTodo);
+  };
+
+  const handleEditTodo = (e) => {
+    console.log(e);
+    e.preventDefault();
+    if (input.length) {
+      setTodos(
+        todos.map((item) => {
+          if (item.id === selectedTodo.id) {
+            return { ...item, todo: input };
+          }
+          return item;
+        })
+      );
+      setInput("");
+      setBtnLabel("Add");
+    }
   };
 
   return (
     <div className="mx-[5%] md:mx-[15%]">
       <Navbar />
       <Form
-        todo={todo}
-        setTodo={setTodo}
+        input={input}
+        setInput={setInput}
         todos={todos}
         setTodos={setTodos}
         btnLabel={btnLabel}
         handleAddTodo={handleAddTodo}
+        handleEditTodo={handleEditTodo}
       />
       <Container
         todos={todos}

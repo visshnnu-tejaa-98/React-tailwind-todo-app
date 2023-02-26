@@ -5,6 +5,7 @@ const Container = ({
   handleDeleteTodo,
   handleOnComplete,
   handleEdit,
+  handleEditTodo,
 }) => {
   return (
     <div className="flex justify-center">
@@ -20,6 +21,7 @@ const Container = ({
                 handleDeleteTodo={handleDeleteTodo}
                 handleOnComplete={handleOnComplete}
                 handleEdit={handleEdit}
+                handleEditTodo={handleEditTodo}
               />
             ))}
           <p className="text-teal-300 text-center">
